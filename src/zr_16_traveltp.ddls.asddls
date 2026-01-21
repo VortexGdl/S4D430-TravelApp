@@ -4,8 +4,10 @@
 
 @EndUserText.label: 'Travel Restricted'
 
-define view entity ZR_16_TravelTP
+define root view entity ZR_16_TravelTP
   as select from ZI_16_Travel
+
+  composition [0..*] of ZR_16_BookingTP as _Bookings
 
 {
   key TravelId,
@@ -27,5 +29,8 @@ define view entity ZR_16_TravelTP
       CreatedBy,
       CreatedAt,
       LastChangedBy,
-      LastChangedAt
+      LastChangedAt,
+
+      // Association
+      _Bookings
 }

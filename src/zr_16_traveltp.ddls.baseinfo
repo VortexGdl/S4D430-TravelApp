@@ -6,7 +6,9 @@
 "ZI_16_TRAVEL"
 ],
 "ASSOCIATED":
-[],
+[
+"ZR_16_BOOKINGTP"
+],
 "BASE":
 [],
 "ANNO_REF":

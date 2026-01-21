@@ -8,8 +8,8 @@
 
 @Search.searchable: true
 
-define view entity ZC_16_TravelTP
-  as select from ZR_16_TravelTP
+define root view entity ZC_16_TravelTP
+  as projection on ZR_16_TravelTP
 
 {
   key TravelId,
@@ -30,5 +30,8 @@ define view entity ZC_16_TravelTP
       CreatedBy,
       CreatedAt,
       LastChangedBy,
-      LastChangedAt
+      LastChangedAt,
+      
+      //Association
+      _Bookings : redirected to composition child ZC_16_BOOKINGTP
 }
