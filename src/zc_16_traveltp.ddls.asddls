@@ -9,6 +9,7 @@
 @Search.searchable: true
 
 define root view entity ZC_16_TravelTP
+  provider contract transactional_query
   as projection on ZR_16_TravelTP
 
 {
