@@ -1,8 +1,8 @@
 managed implementation in class zbp_16_travel unique;
 strict ( 2 );
 
-//Behaviour definition for root entity booking
-define behavior for ZR_16_TravelTP alias Travel//alias <alias_name>
+/* Behavior Defintion for Root Entity Travel */
+define behavior for ZR_16_TravelTP alias Travel
 persistent table /dmo/travel
 lock master
 authorization master ( instance )
@@ -13,7 +13,10 @@ authorization master ( instance )
   delete;
   association _Bookings { create; }
 
-  field ( readonly ) TravelId;
+  field ( mandatory : create ) TravelId, AgencyId, BeginDate, CustomerId, Description, EndDate;
+  field ( readonly : update ) TravelId, AgencyId, BeginDate, CustomerId, Description, EndDate;
+
+  validation ValidateCustomer on save { create; }
 
   mapping for /dmo/travel corresponding
     {
@@ -26,9 +29,11 @@ authorization master ( instance )
       TotalPrice   = total_price;
       TravelId     = travel_id;
     }
+
 }
 
-define behavior for ZR_16_BookingTP alias Booking//alias <alias_name>
+/* Behavior Defintion for Child Entity Booking */
+define behavior for ZR_16_BookingTP alias Booking
 persistent table /dmo/booking
 lock dependent by _Travel
 authorization dependent by _Travel
@@ -36,8 +41,9 @@ authorization dependent by _Travel
 {
   update;
   delete;
-  field ( readonly ) TravelId, BookingId;
   association _Travel;
+
+  field ( readonly ) TravelId, BookingId;
 
   mapping for /dmo/booking corresponding
     {
@@ -51,4 +57,5 @@ authorization dependent by _Travel
       FlightPrice  = flight_price;
       TravelId     = travel_id;
     }
+
 }

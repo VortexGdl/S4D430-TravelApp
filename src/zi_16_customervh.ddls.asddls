@@ -1,7 +1,6 @@
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Werte Hilfe'
-@Metadata.ignorePropagatedAnnotations: true
 define view entity ZI_16_CustomerVH as select from /dmo/customer
 {
   key customer_id as CustomerId,
