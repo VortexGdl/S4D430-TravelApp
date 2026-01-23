@@ -9,6 +9,8 @@ CLASS lhc_Travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
       IMPORTING keys FOR Travel~ValidateCustomer.
     METHODS DeterminStatus FOR DETERMINE ON SAVE
       IMPORTING keys FOR Travel~DeterminStatus.
+    METHODS CancelTravel FOR MODIFY
+      IMPORTING keys FOR ACTION Travel~CancelTravel. " RESULT result.
 
 ENDCLASS.
 
@@ -42,36 +44,38 @@ CLASS lhc_Travel IMPLEMENTATION.
 
       IF exists IS INITIAL.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
-        data(message) = new zcm_00_travel(
-        textid = zcm_00_travel=>no_customer_found
-        customer_id = travel-CustomerId
-        severity = if_abap_behv_message=>severity-error ).
+        DATA(message) = NEW zcm_00_travel( textid      = zcm_00_travel=>no_customer_found
+                                           customer_id = travel-CustomerId
+                                           severity    = if_abap_behv_message=>severity-error ).
 
-        APPEND value #( %tky = travel-%tky
-                        %msg = message
-                        %element-CustomerId = if_abap_behv=>mk-on ) to reported-travel.
+        APPEND VALUE #( %tky                = travel-%tky
+                        %msg                = message
+                        %element-CustomerId = if_abap_behv=>mk-on ) TO reported-travel.
       ENDIF.
 
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD DeterminStatus.
+    DATA travels TYPE TABLE FOR UPDATE zr_16_traveltp.
 
-      DATA travels type TABLE FOR update zr_16_traveltp.
+    LOOP AT keys INTO DATA(key).
+      APPEND VALUE #( %tky   = key-%tky
+                      Status = 'N' ) TO travels.
+    ENDLOOP.
 
-      LOOP AT keys into data(key).
-          APPEND value #( %tky = key-%tky
-                          Status = 'N' ) to travels.
-      endloop.
-
-
-      modify ENTITIES OF zr_16_traveltp in LOCAL mode
-        entity Travel
-        UPDATE
-        FIELDS ( Status )
-        with travels.
-
+    MODIFY ENTITIES OF zr_16_traveltp IN LOCAL MODE
+           ENTITY Travel
+           UPDATE
+           FIELDS ( Status )
+           WITH travels.
   ENDMETHOD.
 
+  METHOD CancelTravel.
+    DATA(message) = NEW zcm_00_travel( textid    = zcm_00_travel=>test_message
+                                       user_name = sy-uname
+                                       severity  = if_abap_behv_message=>severity-information ).
+
+    APPEND message TO reported-%other.
+  ENDMETHOD.
 ENDCLASS.

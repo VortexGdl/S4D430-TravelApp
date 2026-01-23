@@ -22,6 +22,8 @@ authorization master ( instance )
 
   determination DeterminStatus on save { create; }
 
+  action CancelTravel; // result [1] $self;
+
   mapping for /dmo/travel corresponding
     {
       AgencyId     = agency_id;
