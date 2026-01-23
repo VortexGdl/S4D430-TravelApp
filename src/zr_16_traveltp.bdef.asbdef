@@ -16,7 +16,11 @@ authorization master ( instance )
   field ( mandatory : create ) TravelId, AgencyId, BeginDate, CustomerId, Description, EndDate;
   field ( readonly : update ) TravelId, AgencyId, BeginDate, CustomerId, Description, EndDate;
 
+  field ( readonly ) Status, CreatedAt, CreatedBy, LastChangedAt, LastChangedBy;
+
   validation ValidateCustomer on save { create; }
+
+  determination DeterminStatus on save { create; }
 
   mapping for /dmo/travel corresponding
     {

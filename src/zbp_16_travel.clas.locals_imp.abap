@@ -7,6 +7,8 @@ CLASS lhc_Travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
       IMPORTING REQUEST requested_authorizations FOR Travel RESULT result.
     METHODS ValidateCustomer FOR VALIDATE ON SAVE
       IMPORTING keys FOR Travel~ValidateCustomer.
+    METHODS DeterminStatus FOR DETERMINE ON SAVE
+      IMPORTING keys FOR Travel~DeterminStatus.
 
 ENDCLASS.
 
@@ -52,4 +54,24 @@ CLASS lhc_Travel IMPLEMENTATION.
 
     ENDLOOP.
   ENDMETHOD.
+
+
+  METHOD DeterminStatus.
+
+      DATA travels type TABLE FOR update zr_16_traveltp.
+
+      LOOP AT keys into data(key).
+          APPEND value #( %tky = key-%tky
+                          Status = 'N' ) to travels.
+      endloop.
+
+
+      modify ENTITIES OF zr_16_traveltp in LOCAL mode
+        entity Travel
+        UPDATE
+        FIELDS ( Status )
+        with travels.
+
+  ENDMETHOD.
+
 ENDCLASS.
