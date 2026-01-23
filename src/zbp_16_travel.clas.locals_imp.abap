@@ -10,7 +10,7 @@ CLASS lhc_Travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS DeterminStatus FOR DETERMINE ON SAVE
       IMPORTING keys FOR Travel~DeterminStatus.
     METHODS CancelTravel FOR MODIFY
-      IMPORTING keys FOR ACTION Travel~CancelTravel. " RESULT result.
+      IMPORTING keys FOR ACTION Travel~CancelTravel RESULT result.
 
 ENDCLASS.
 
